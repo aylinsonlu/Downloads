@@ -29,7 +29,7 @@ def download_genomes(base_path):
                         #os.mkdir(os.path.join(base_path))
                         host.keep_alive()
                         host.download('/pub/release-106/fasta/' +genomes_directory + '/dna/'+dna_file, os.path.join(download_path,species_name+".fasta"))
-                    elif  "dna_sm.toplevel.fa.gz" in dna_file:
+                    elif  ".dna_sm.toplevel.fa.gz" in dna_file:
                         species_name = dna_file.split(".")[0]
                         os.makedirs(base_path+species_name)
                         download_path = base_path+species_name
