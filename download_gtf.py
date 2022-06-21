@@ -15,7 +15,7 @@ def download_gtf(base_path,host,ftp_site):
         host.chdir(ftp_site +species_directory + '/')
         gtf_files = host.listdir(host.curdir)
         for gtf_file in gtf_files:
-            if "abinitio.gtf.gz" not in gtf_file:
+            if "abinitio.gtf.gz" not in gtf_file and ".gtf.gz" in gtf_file: 
                 species_name = gtf_file.split(".")[0]
                 if species_name in dirs:
                     continue
