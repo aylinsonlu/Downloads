@@ -4,30 +4,36 @@ import sys
 import ftputil
 import shutil
 
-def download_gtf(base_path):
+def download_gtf(base_path,host,ftp_site,version):
+    dirs = os.listdir(base_path)
+    host = ftputil.FTPHost(host,'anonymous','password')
 
-    host = ftputil.FTPHost('ftp.ensembl.org','anonymous','password')
-
-    host.chdir('/pub/release-106/gtf/')
+    host.chdir(ftp_site)
     species_directories = host.listdir(host.curdir)
 
     for species_directory in species_directories:
-        host.chdir('/pub/release-106/gtf/' +species_directory + '/')
+        host.chdir(ftp_site +species_directory + '/')
         gtf_files = host.listdir(host.curdir)
         for gtf_file in gtf_files:
-            #print(gtf_file)
-            if "106.gtf.gz"  in gtf_file:
+            if version+".gtf.gz"  in gtf_file:
                 species_name = gtf_file.split(".")[0]
-                os.makedirs(base_path+species_name)
-                download_path = base_path+species_name
-                os.chdir(download_path)
-                #os.mkdir(os.path.join(base_path))
-                host.keep_alive()
-                host.download('/pub/release-106/gtf/' +species_directory+ '/' +gtf_file, os.path.join(download_path,species_name+".gtf.gz"))
-                bashCommand ="gunzip " +species_name+".gtf.gz"
-                os.system(bashCommand)
+                if species_name in dirs:
+                    continue
+                else:
+               
+                    os.makedirs(base_path+species_name)
+                    download_path = base_path+species_name
+                    os.chdir(download_path)
+                    #os.mkdir(os.path.join(base_path))
+                    host.keep_alive()
+                    host.download(ftp_site +species_directory+ '/' +gtf_file, os.path.join(download_path,species_name+".gtf.gz"))
+                    bashCommand ="gunzip " +species_name+".gtf.gz"
+                    os.system(bashCommand)
     
 
 if __name__ == "__main__":
     base_path = sys.argv[1]
-    download_gtf(base_path)
+    host = sys.argv[2]
+    ftp_site = sys.argv[3]
+    version = sys.argv[4]
+    download_gtf(base_path,host,ftp_site,version)
