@@ -3,6 +3,7 @@ from re import S
 import sys
 import ftputil
 import shutil
+import re
 
 def download_gtf(base_path,host,ftp_site):
     dirs = os.listdir(base_path)
@@ -15,20 +16,21 @@ def download_gtf(base_path,host,ftp_site):
         host.chdir(ftp_site +species_directory + '/')
         gtf_files = host.listdir(host.curdir)
         for gtf_file in gtf_files:
-            if "abinitio.gtf.gz" not in gtf_file and ".gtf.gz" in gtf_file: 
-                species_name = gtf_file.split(".")[0]
-                if species_name in dirs:
-                    continue
-                else:
-               
-                    os.makedirs(base_path+species_name)
-                    download_path = base_path+species_name
-                    os.chdir(download_path)
-                    #os.mkdir(os.path.join(base_path))
-                    host.keep_alive()
-                    host.download(ftp_site +species_directory+ '/' +gtf_file, os.path.join(download_path,species_name+".gtf.gz"))
-                    bashCommand ="gunzip " +species_name+".gtf.gz"
-                    os.system(bashCommand)
+            if ".gtf.gz"in gtf_file:
+                if re.match(r'^([\s\d]+)$', gtf_file.split(".gtf.gz")[0].split(".")[-1]):
+                    species_name = gtf_file.split(".")[0]
+                    if species_name in dirs:
+                        continue
+                    else:
+                
+                        os.makedirs(base_path+species_name)
+                        download_path = base_path+species_name
+                        os.chdir(download_path)
+                        #os.mkdir(os.path.join(base_path))
+                        host.keep_alive()
+                        host.download(ftp_site +species_directory+ '/' +gtf_file, os.path.join(download_path,species_name+".gtf.gz"))
+                        bashCommand ="gunzip " +species_name+".gtf.gz"
+                        os.system(bashCommand)
     
 
 if __name__ == "__main__":
