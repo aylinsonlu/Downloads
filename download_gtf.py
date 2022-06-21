@@ -23,7 +23,9 @@ def download_gtf(base_path):
                 os.chdir(download_path)
                 #os.mkdir(os.path.join(base_path))
                 host.keep_alive()
-                host.download('/pub/release-106/gtf/' +species_directory+ '/' +gtf_file, os.path.join(download_path,species_name+".gtf"))
+                host.download('/pub/release-106/gtf/' +species_directory+ '/' +gtf_file, os.path.join(download_path,species_name+".gtf.gz"))
+                bashCommand ="gunzip " +species_name+".gtf.gz"
+                os.system(bashCommand)
     
 
 if __name__ == "__main__":
