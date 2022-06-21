@@ -4,7 +4,7 @@ import sys
 import ftputil
 import shutil
 
-def download_gtf(base_path,host,ftp_site,version):
+def download_gtf(base_path,host,ftp_site):
     dirs = os.listdir(base_path)
     host = ftputil.FTPHost(host,'anonymous','password')
 
@@ -15,7 +15,7 @@ def download_gtf(base_path,host,ftp_site,version):
         host.chdir(ftp_site +species_directory + '/')
         gtf_files = host.listdir(host.curdir)
         for gtf_file in gtf_files:
-            if version+".gtf.gz"  in gtf_file:
+            if "abinitio.gtf.gz" not in gtf_file:
                 species_name = gtf_file.split(".")[0]
                 if species_name in dirs:
                     continue
@@ -35,5 +35,6 @@ if __name__ == "__main__":
     base_path = sys.argv[1]
     host = sys.argv[2]
     ftp_site = sys.argv[3]
-    version = sys.argv[4]
-    download_gtf(base_path,host,ftp_site,version)
+    download_gtf(base_path,host,ftp_site)
+
+
