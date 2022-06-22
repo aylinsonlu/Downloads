@@ -16,7 +16,7 @@ def download_gtf(base_path,host,ftp_site):
         host.chdir(ftp_site +species_directory + '/')
         gtf_files = host.listdir(host.curdir)
         for gtf_file in gtf_files:
-            if ".".join(gtf_file.split(".")[-2:])==".gtf.gz":
+            if ".".join(gtf_file.split(".")[-2:])=="gtf.gz":
                 if re.match(r'^([\s\d]+)$', gtf_file.split(".gtf.gz")[0].split(".")[-1]):
                     species_name = gtf_file.split(".")[0]
                     if species_name in dirs:
